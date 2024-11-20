@@ -42,8 +42,8 @@ def escribir(cliente, apodo):
             print(f"\033[31mError de: {e}\033[0m")
 
 
-def iniciar_cliente():
-    cliente = crear_cliente()
+def iniciar_cliente(cliente):
+    
     apodo = ""
     
     while not verificar_msj(apodo):
@@ -57,8 +57,9 @@ def iniciar_cliente():
     hilo_escribir = threading.Thread(target=escribir, args=(cliente, apodo))
     hilo_escribir.start()
 
-    
 
+    
+cliente = crear_cliente()
 
 if __name__ == "__main__":
-    iniciar_cliente()
+    iniciar_cliente(cliente)
