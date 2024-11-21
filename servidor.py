@@ -36,16 +36,18 @@ def manejar_clientes(cliente):
                 break
             transmision(mensaje)
 
-        except:
+        except Exception as e:
+            print(f"Error al manejar el cliente: {e}")
             
             break
-    indice = clientes.index(cliente)
-    clientes.remove(cliente)
-    apodo = apodos[indice]
-    apodos.remove(apodo)
-    cliente.close()
-    transmision(f'{apodo} ha dejado el chat!'.encode("utf-8"))
-    print(f'{apodo} ha abandonado la sala del chat: ')
+        finally:
+            indice = clientes.index(cliente)
+            clientes.remove(cliente)
+            apodo = apodos[indice]
+            apodos.remove(apodo)
+            cliente.close()
+            transmision(f'{apodo} ha dejado el chat!'.encode("utf-8"))
+            print(f'{apodo} ha abandonado la sala del chat: ')
 
 
 def recibir ():

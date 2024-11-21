@@ -9,10 +9,15 @@ def crear_cliente(direccion='127.0.0.1', puerto=5001):
 
 
 def verificar_msj(mensaje):
-    if mensaje == "":
-        return False
-    else:
-        return True
+    mensaje = mensaje.strip()
+    return bool(mensaje)
+    
+def verificar_apodo(apodo):
+    
+    apodo = apodo.strip()
+    if len(apodo) < 3 or len(apodo) > 20:
+            return False
+    return True
 
 
 def recibir(cliente, apodo):
@@ -32,8 +37,9 @@ def recibir(cliente, apodo):
 def escribir(cliente, apodo):
     while True:
         try:
-            mensaje = f'{apodo}: {input("")}'
-            if verificar_msj(mensaje):
+            msj = f"{input("")}"
+            mensaje = f'{apodo}:{msj} '
+            if verificar_msj(msj):
                 cliente.send(mensaje.encode('utf-8'))
             else:
                 print("\033[31mError mensaje vacio\033[0m")
@@ -42,24 +48,32 @@ def escribir(cliente, apodo):
             print(f"\033[31mError de: {e}\033[0m")
 
 
-def iniciar_cliente(cliente):
-    
+def imput():
     apodo = ""
-    
-    while not verificar_msj(apodo):
+    while not verificar_apodo(apodo):
         apodo = input('Ingrese su nombre de usuario: ')
-        if not apodo:
-            print("\033[31m⚠️  El apodo no puede estar vacío. Intenta nuevamente.\033[0m")
+        print(apodo)
+        if verificar_apodo(apodo):
+            return apodo
+        if not verificar_apodo(apodo):
+            print("\033[31m⚠️  El apodo no puede estar vacío, y debe ser de min 3 letras y max 10. Intenta nuevamente.\033[0m")
+         
             
-    hilo_recibir = threading.Thread(target=recibir, args=(cliente, apodo))
-    hilo_recibir.start()
+def iniciar_cliente(cliente,apodo):
+    try:
+        
+        if apodo:
+            hilo_recibir = threading.Thread(target=recibir, args=(cliente, apodo))
+            hilo_recibir.start()
 
-    hilo_escribir = threading.Thread(target=escribir, args=(cliente, apodo))
-    hilo_escribir.start()
-
+            hilo_escribir = threading.Thread(target=escribir, args=(cliente, apodo))
+            hilo_escribir.start()
+    except Exception as e:
+        return (f"Error iniciando al cliente: {str(e)}")
 
     
-cliente = crear_cliente()
-
+    
 if __name__ == "__main__":
-    iniciar_cliente(cliente)
+    cliente = crear_cliente()
+    apodoi = imput()
+    iniciar_cliente(cliente,apodoi)
