@@ -1,8 +1,7 @@
 from clientet import verificar_msj,crear_cliente, iniciar_cliente,imput
 from unittest.mock import patch, MagicMock 
 
-def test_msj_vacio():
-    
+def test_msj_vacio(): 
     mensaje = ""
     assert not verificar_msj(mensaje)
  
@@ -10,12 +9,12 @@ def test_msj_vacio():
 def test_crear_cliente_mock():  
 
     with patch('socket.socket') as MockSocket:
-        # Creamos una instancia simulada del socket
+        # instancia simulada del socket
         mock_instance = MagicMock()
         
         MockSocket.return_value = mock_instance 
 
-        mock_instance.connect.return_value = None  # Simula una conexión exitosa
+        mock_instance.connect.return_value = None  # simula una conexión exitosa
         
         direccion = '127.0.0.1'
         puerto = 5001
@@ -35,7 +34,7 @@ def test_imput():
 
 def cliente_generado():
         with patch('socket.socket') as MockSocket:
-            # Creamos una instancia simulada del socket
+            # instancia simulada del socket
             mock_instance = MagicMock()
             
             MockSocket.return_value = mock_instance 
