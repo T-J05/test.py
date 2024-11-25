@@ -1,6 +1,8 @@
 import socket
 import threading
-
+import sys
+import traceback
+ 
 clientes = []
 apodos = []
 
@@ -20,17 +22,22 @@ def manejar_clientes(cliente):
                 break
             transmision(mensaje)
         except Exception as e:
-            print(f"Error al manejar el cliente: {e}")
+            print(f"Error al manejar el cliente: {e.args}")
+            exc_type, exc_value, exc_traceback = sys.exc_info()
+            print(f"Tipo de excepción: {exc_type.__name__}")
+            print(f"Valor de excepción: {exc_value}")
+            print("Traza completa:")
+            traceback.print_tb(exc_traceback)
             break
-        finally:
-            if cliente in clientes:
-                indice = clientes.index(cliente)
-                apodo = apodos[indice]
-                clientes.remove(cliente)
-                apodos.remove(apodo)
-                cliente.close()
-                transmision(f'{apodo} ha dejado el chat!'.encode("utf-8"))
-                print(f'{apodo} ha abandonado la sala del chat.')
+
+    if cliente in clientes:
+        indice = clientes.index(cliente)
+        apodo = apodos[indice]
+        clientes.remove(cliente)
+        apodos.remove(apodo)
+        cliente.close()
+        transmision(f'{apodo} ha dejado el chat!'.encode("utf-8"))
+        print(f'{apodo} ha abandonado la sala del chat.')
 
 def recibir(s):
     while True:

@@ -28,8 +28,12 @@ def recibir(cliente, apodo):
                 cliente.send(apodo.encode('utf-8'))
             else:
                 print(mensaje)
+        except socket.error as e:
+            print(f'Se ha producido un error en la conexión: {e}')
+            cliente.close()
+            break
         except Exception as e:
-            print(f'Se ha producido un error: {e}')
+            print(f'Se ha producido un error inesperado: {e}')
             cliente.close()
             break
 
